@@ -4,7 +4,7 @@ const userService = require('./usuario.service');
 
 router.post('/authenticate', authenticate);
 router.post('/register', register);
-router.post('/token', gNewTokenAcces);
+router.post('/token-refresh', gNewTokenAcces);
 router.get('/', getAll);
 router.get('/actual', getCurrent);
 router.get('/:id', getById);

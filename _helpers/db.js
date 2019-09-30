@@ -10,11 +10,10 @@ mongoose.connect(
     process.env.MONGODB_URI || config.connectionString, {
         useNewUrlParser: true,
         useCreateIndex: true,
-
         useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useFindAndModify: true,
-        useCreateIndex: true,
+        // useNewUrlParser: true,
+        // useFindAndModify: true,
+        // useCreateIndex: true,
     });
 
 mongoose.Promise = global.Promise;

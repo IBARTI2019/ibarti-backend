@@ -7,13 +7,14 @@ const INACTIVO = 0
 const ACTIVO = 1
 const PERMISO_ACTIVO_PRIMARIO = 1
 const PERMISO_ACTIVO_SECUNDARIO = 2
+
 // Esquema Mongoose para un Usuario que se enviará a la base de datos Mongo
 var usuarioSchema = new Schema({
-    nro_personal: {
+    username: {
         type: String,
         unique: true,
         required: true,
-        maxlength: 20
+        maxlength: 8
     },
     nombre: {
         type: String,
@@ -32,9 +33,18 @@ var usuarioSchema = new Schema({
         type: String,
         default: null
     },
+    fec_mod_pass:{
+        type: Date,
+        default: null
+    },
     roles: {
         type: Schema.Types.ObjectId,
         ref: 'Rol',
+        default: null
+    },
+    permisos: {
+        type: Schema.Types.ObjectId,
+        ref: 'Permiso',
         default: null
     },
     // ubicaciones: {
@@ -44,6 +54,11 @@ var usuarioSchema = new Schema({
     telefono: {
         type: String,
         maxlength: 30,
+        default: null
+    },
+    ip:{
+        type: String,
+        maxlength: 255,
         default: null
     },
     email: {
@@ -70,11 +85,21 @@ var usuarioSchema = new Schema({
     accesToken: {
         type: String,
         required: false,
-        default: 'null'
+        default: null
+    },
+    confirmCode: {
+        type: String,
+        required: false,
+        maxlength: 8,
+        default: null
     },
     createdDate: {
         type: Date,
         default: Date.now()
+    },
+    updatedDate: {
+        type: Date,
+        default: null
     }
 });
 

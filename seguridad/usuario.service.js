@@ -23,10 +23,10 @@ module.exports = {
 };
 
 async function isLoggedIn({
-    nro_personal
+    username
 }) {
     const user = await User.findOne({
-        nro_personal
+        username
     });
     if (user !== null) {
         if (user.accesToken !== null) {
@@ -44,19 +44,19 @@ async function isLoggedIn({
     return null;
 }
 
-async function gNewTokenAcces(nro_personalparam, tokenRefresh) {
+async function gNewTokenAcces(usernameparam, tokenRefresh) {
     // console.log('Data in refreshTokens: ', refreshTokens);
     // await db.dropCollection('Colection');
     // await db.dropCollection('Subcategoria');
-    refreshTokens[tokenRefresh] = nro_personalparam;
-    if (tokenRefresh in refreshTokens && refreshTokens[tokenRefresh] === nro_personalparam) {
+    refreshTokens[tokenRefresh] = usernameparam;
+    if (tokenRefresh in refreshTokens && refreshTokens[tokenRefresh] === usernameparam) {
         var user = await User.findOne({
-            nro_personal: nro_personalparam
+            username: usernameparam
         });
         // console.log(user);
         if (user) {
             user.accesToken = jwt.sign({
-                    name: user.nro_personal,
+                    name: user.username,
                     sub: user.id,
                     rol: user.rol
                 },
@@ -75,11 +75,11 @@ async function gNewTokenAcces(nro_personalparam, tokenRefresh) {
 }
 
 async function authenticate({
-    nro_personal,
+    username,
     password
 }) {
     const user = await User.findOne({
-        nro_personal
+        username
     });
     if (user && password === user.password) {
         user.loggedIn = true;
@@ -88,7 +88,7 @@ async function authenticate({
             ...userWithoutHash
         } = user.toObject();
         const token = jwt.sign({
-                name: nro_personal,
+                name: username,
                 sub: user.id,
                 rol: ''
             },
@@ -98,7 +98,7 @@ async function authenticate({
 
         user.accesToken = token;
         const tokenRefresh = randT.generate(16);
-        refreshTokens[tokenRefresh] = nro_personal;
+        refreshTokens[tokenRefresh] = username;
         await user.save();
         return {
             ...userWithoutHash,
@@ -120,15 +120,15 @@ async function getById(id) {
 
 async function create(userParam) {
     if (await User.findOne({
-            nro_personal: userParam.nro_personal
+            username: userParam.username
         })) {
-        throw 'Nro Personal "' + userParam.nro_personal + '" is already taken';
+        throw 'Username"' + userParam.username + '" is already taken';
     }
     const user = new User(userParam);
     await user.save((error) => {
         if (error) {
             console.log(error);
-            throw (error);
+           return error;
         }
     });
     return user;
@@ -139,10 +139,10 @@ async function update(id, userParam) {
 
     if (!user) throw 'User not found';
 
-    if (user.nro_personal !== userParam.nro_personal && await User.findOne({
-            nro_personal: userParam.nro_personal
+    if (user.username !== userParam.username && await User.findOne({
+            username: userParam.username
         })) {
-        throw 'nro_personal "' + userParam.nro_personal + '" is already taken';
+        throw 'username "' + userParam.username + '" is already taken';
     }
 
     if (userParam.password) {

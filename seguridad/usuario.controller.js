@@ -7,8 +7,9 @@ router.post('/register', register);
 router.post('/token-refresh', gNewTokenAcces);
 router.get('/', getAll);
 router.get('/actual', getCurrent);
-router.get('/:id', getById);
+router.get('/getUser', getByProperty);
 router.put('/:id', update);
+router.put('/setUserPass/:id', update);
 router.put('/logout/:id', logout);
 router.delete('/:id', _delete);
 
@@ -74,7 +75,13 @@ function getCurrent(req, res, next) {
 }
 
 function getById(req, res, next) {
-    userService.getById(req.params.id)
+    userService.getById({_id:req.params.id})
+        .then((user) => user ? res.json(user) : res.sendStatus(404))
+        .catch((err) => next(err));
+}
+
+function getByProperty(req, res, next) {
+    userService.getById(req.query)
         .then((user) => user ? res.json(user) : res.sendStatus(404))
         .catch((err) => next(err));
 }

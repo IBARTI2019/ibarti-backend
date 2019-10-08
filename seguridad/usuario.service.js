@@ -79,43 +79,44 @@ async function authenticate({
     password
 }) {
     const user = await User.findOne({
-        username
+        username:username
     });
-    if (user && password === user.password) {
-        user.loggedIn = true;
-        const {
-            hash,
-            ...userWithoutHash
-        } = user.toObject();
-        const token = jwt.sign({
-                name: username,
-                sub: user.id,
-                rol: ''
-            },
-            config.secret, {
-                expiresIn: 60
-            });
+    if(bcrypt.compareSync(password,user.password)){
+    user.loggedIn = true;
+    const {
+        hash,
+        ...userWithoutHash
+    } = user.toObject();
+    const token = jwt.sign({
+            name: username,
+            sub: user.id,
+            rol: ''
+        },
+        config.secret, {
+            expiresIn: 60
+        });
+    
+    user.accesToken = token;
+    const tokenRefresh = randT.generate(16);
+    refreshTokens[tokenRefresh] = username;
+    await user.save();
+    return {
+        ...userWithoutHash,
+        token,
+        tokenRefresh
+    };
+}
 
-        user.accesToken = token;
-        const tokenRefresh = randT.generate(16);
-        refreshTokens[tokenRefresh] = username;
-        await user.save();
-        return {
-            ...userWithoutHash,
-            token,
-            tokenRefresh
-        };
-    }
+    // if (user && password === user.password) {
+    // }
 }
 
 async function getAll() {
     return await User.find().select('-hash');
 }
 
-async function getById(id) {
-    return await User.findOne({
-        _id: id
-    }).select('-hash');
+async function getById({...query}) {
+    return await User.findOne(query).select('-hash');
 }
 
 async function create(userParam) {

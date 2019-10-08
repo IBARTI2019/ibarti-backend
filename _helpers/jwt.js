@@ -13,6 +13,9 @@ function jwt() {
         path: [
             // Lista de rutas que no requieren Autenticación
             '/seguridad/usuario/authenticate',
+            /^\/seguridad\/usuario\/getUser.*/,
+            /^\/seguridad\/usuario\/setUserPass\/.*/,
+            // '/seguridad/usuario/setUserPass',
             '/seguridad/usuario/logout',
             '/seguridad/usuario/isLoggedIn',
             '/seguridad/usuario/token',
@@ -23,7 +26,7 @@ function jwt() {
 }
 
 async function isRevoked(req, payload, done) {
-    const user = await userService.getById(payload.sub);
+    const user = await userService.getById({_id:payload.sub});
     // Rovacar Toen si el usuario no existe
     if (!user) {
         console.log('User Not Found');

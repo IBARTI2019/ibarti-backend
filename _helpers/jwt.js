@@ -16,6 +16,7 @@ function jwt() {
             /^\/seguridad\/usuario\/getUser.*/,
             /^\/seguridad\/usuario\/setUserPass\/.*/,
             // '/seguridad/usuario/setUserPass',
+            '/sendMail',
             '/seguridad/usuario/logout',
             '/seguridad/usuario/isLoggedIn',
             '/seguridad/usuario/token',

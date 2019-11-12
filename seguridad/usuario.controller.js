@@ -3,10 +3,11 @@ const router = express.Router();
 const userService = require('./usuario.service');
 
 router.post('/authenticate', authenticate);
-router.post('/register', register);
+router.post('/', register);
 router.post('/token-refresh', gNewTokenAcces);
 router.get('/', getAll);
 router.get('/actual', getCurrent);
+router.get('/getId/:id', getById);
 router.get('/getUser', getByProperty);
 router.put('/:id', update);
 router.put('/setUserPass/:id', update);
@@ -41,7 +42,17 @@ function register(req, res, next) {
         .catch((err) => next(err));
 }
 
+function registerMany(req,res,next){
+    userService.createMany(req.body)
+        .then((data) => {
+            console.log(data);
+            return res.json(data);
+        })
+        .catch((err) => next(err));
+}
+
 function gNewTokenAcces(req, res, next) {
+    console.log(req.body);
     userService.gNewTokenAcces(req.body.username, req.body.tokenRefresh)
         .then((newTokenAcces) => {
             if (newTokenAcces !== 'User Not Found' && newTokenAcces !== 'User Not Authorized') {
@@ -75,13 +86,12 @@ function getCurrent(req, res, next) {
 }
 
 function getById(req, res, next) {
-    userService.getById({_id:req.params.id})
+    userService.getById(req.params.id)
         .then((user) => user ? res.json(user) : res.sendStatus(404))
         .catch((err) => next(err));
 }
-
 function getByProperty(req, res, next) {
-    userService.getById(req.query)
+    userService.getByProp(req.query)
         .then((user) => user ? res.json(user) : res.sendStatus(404))
         .catch((err) => next(err));
 }

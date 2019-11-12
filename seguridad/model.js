@@ -27,13 +27,14 @@ var usuarioSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        default: null
+        // required: true
     },
     last_password: {
         type: String,
         default: null
     },
-    fec_mod_pass:{
+    fec_mod_pass: {
         type: Date,
         default: null
     },
@@ -42,11 +43,11 @@ var usuarioSchema = new Schema({
         ref: 'Rol',
         default: null
     },
-    permisos: {
+    permisos: [{
         type: Schema.Types.ObjectId,
-        ref: 'Permiso',
-        default: null
-    },
+        ref: 'Permiso'
+    }]
+    ,
     // ubicaciones: {
     //     type: Schema.Types.ObjectId,
     //     ref: 'Ubicacion'
@@ -56,7 +57,7 @@ var usuarioSchema = new Schema({
         maxlength: 30,
         default: null
     },
-    ip:{
+    ip: {
         type: String,
         maxlength: 255,
         default: null
@@ -159,11 +160,10 @@ var rolSchema = new Schema({
         maxlength: 255,
         unique: true
     },
-    permisos: {
+    permisos: [{
         type: Schema.Types.ObjectId,
-        ref: 'Permiso',
-        default: null
-    },
+        ref: 'Permiso'
+    }],
     estado: {
         type: Number,
         default: ACTIVO

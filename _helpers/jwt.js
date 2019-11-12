@@ -13,13 +13,16 @@ function jwt() {
         path: [
             // Lista de rutas que no requieren Autenticación
             '/seguridad/usuario/authenticate',
+            '/seguridad/usuario/'/*Temporal*/,
+            /^\/seguridad\/usuario\/.*/,
             /^\/seguridad\/usuario\/getUser.*/,
             /^\/seguridad\/usuario\/setUserPass\/.*/,
+            /^\/seguridad\/usuario\/getId\/.*//*Temporal*/,
             // '/seguridad/usuario/setUserPass',
             '/sendMail',
+            '/sendMail/file',
             '/seguridad/usuario/logout',
             '/seguridad/usuario/isLoggedIn',
-            '/seguridad/usuario/token',
             '/seguridad/usuario/register',
             '/seguridad/usuario/token',
         ]

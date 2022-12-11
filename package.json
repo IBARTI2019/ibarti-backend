@@ -13,7 +13,7 @@
         "co": "^4.6.0",
         "cors": "^2.8.4",
         "expr-eval": "^1.2.3",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "express-jwt": "^5.3.1",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
